@@ -71,31 +71,7 @@ This procedure will temporarily turn the weather station into a Wi-Fi access poi
     *	Your ThingSpeak channel ID and API Write key
     *	Hit **Save**
 
-6. Example serial output
-7.	If you ever need to change any parameter, press the reset button on the D1 Mini twice in succession. You may have to do this a few times. The unit goes into configuration mode when the blue LED on the D1 Mini turns on and the configuration reminder screen appears.
-
-
-
-
-
-
-## Configure the APRS_config.h file
-Information unique to your weather station must be added to the *APRS_config.h* file. You must have a valid amateur radio license to use APRS.
-
-### Information needed:
-- Your WiFi SSID **(You must use 2.4 GHz not 5 GHz.)**
-- Your WiFi password
-- Station elevation in meters. You can get this at [www.freemaptools.com](https://www.freemaptools.com/elevation-finder.htm)
-- Sleep interval in seconds: 60 for testing, 600 or longer for normal service
-- ThingSpeak channel ID (a numerical value)
-- ThingSpeak API Write Key (alphanumeric between quotes)
-- OPTIONAL (Values determined from running *D1M-WX1_Calibration.ino*)
-  - DMM voltage
-  - ADC reading
-- Find your location at [www.distancesto.com/](https://www.distancesto.com/coordinates.php)
-  - latitude (decimal degrees, positive for north, negative for south)
-  - longitude (decimal degrees, positive for east, negative for west)
-- CALLSIGN-SSID
-- APRS passcode
+6. Example serial output TBD
+7.	If you ever need to change any parameter, press the reset button on the D1 Mini twice in succession. You may have to do this a few times. The unit goes into configuration mode when the blue LED on the D1 Mini turns on.
 
 Save the sketch. Set the PROG/RUN switch to **PROG** and upload to the microcontroller. **Return the switch to RUN after a sucessful upload.**
