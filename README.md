@@ -25,20 +25,20 @@ The general steps are:
 4. Install and configure the Arduino IDE:
 - Download the version for your computer operating system at https://www.arduino.cc/ Do not use the web version or the Windows app.
 - Install the Arduino core for the ESP8266 at https://github.com/esp8266/Arduino Follow the instructions under the heading **Installing with Boards Manager**
-- Add needed libraries to the Arduino IDE using menu item *Sketch>Include Library>Manage Libraries...* Search for and install each of the following libaries. Be aware that there may be several libraries with similar names. Check that you are installing the library by the author noted:
+5. Add needed libraries to the Arduino IDE using menu item *Sketch>Include Library>Manage Libraries...* Search for and install each of the following libaries. Be aware that there may be several libraries with similar names. Check that you are installing the library by the author noted:
   - WiFiManager by tzapu
   - ArduinoJson by Benoît Blanchon
   - BH1750 by Christopher Laws
   - Adafruit_BME280 by Adafruit
   - DoubleResetDetector by Stephen Denne
-5. Download the firmware from this Github repository:
+6. Download the firmware from this Github repository:
 - Click on the **Code** button and select **Download ZIP**. The file will download as **D1M-WX1-APRS-ThingSpeak-OTA-WFM-main.zip**. 
 - Unzip the file. The unzipped folder will contain several files and a folder **D1M-WX1-APRS-ThingSpeak-OTA-WFM**. Copy this folder to your Arduino sketchbook folder.
 - If you need to find your sketchbook folder, open the Arduino IDE and use menu **File>Preferences**. The first line tells you where the sketchbook resides on your computer.
 - Use menu item *File>Sketchbook* to open **D1M-WX1-APRS-ThingSpeak-OTA-WFM**
 - Set *Tools>Board>ESP8266 Boards* to **LOLIN(WEMOS) D1 R2 & mini**
 - Do a test compile from *Sketch>Verify/Compile* or type Control+R. Correct any problems.
-6. Upload the firmware:
+7. Upload the firmware:
   - Set the PROG/RUN switch to PROG on the weather station. 
   - Set the power switch to OFF or unplug the LiPo cell to prevent back feed from the D1 Mini to the cell. 
   - Connect your PC to the D1 Mini with a Micro USB cable.
