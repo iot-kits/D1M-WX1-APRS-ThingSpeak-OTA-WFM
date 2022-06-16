@@ -75,3 +75,7 @@ This procedure will temporarily turn the weather station into a Wi-Fi access poi
 7.	If you ever need to change any parameter, press the reset button on the D1 Mini twice in succession. You may have to do this a few times. The unit goes into configuration mode when the blue LED on the D1 Mini turns on.
 
 Save the sketch. Set the PROG/RUN switch to **PROG** and upload to the microcontroller. **Return the switch to RUN after a sucessful upload.**
+
+| Click to enlarge  | Click to enlarge | Click to enlarge |
+|:----:|:----:|:----:|
+|<img src="/images/CaptivePortalLogin.jpg" width="40%"/> | <img src="/images/CaptivePortalTop.jpg" width="70%"/> | <img src="/images/CaptivePortalLower.jpg" width="70%"/>|  
