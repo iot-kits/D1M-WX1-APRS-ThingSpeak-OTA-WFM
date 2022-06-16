@@ -78,4 +78,5 @@ Save the sketch. Set the PROG/RUN switch to **PROG** and upload to the microcont
 
 | Click to enlarge  |  |  |
 |:----:|:----:|:----:|
-|<img src="/images/CaptivePortalLogin.jpg" width="30%"/> | <img src="/images/CaptivePortalTopjpg.jpg" width="30%"/> | <img src="/images/CaptivePortalLower.jpg" width="30%"/>|  
+|<img src="/images/CaptivePortalLogin.jpg" width="40%"/> | <img src="/images/CaptivePortalTopjpg.jpg" width="40%"/> | <img src="/images/CaptivePortalLower.jpg" width="40%"/>|  
+| 192.168.4.1 | Upper part | Lower part |
