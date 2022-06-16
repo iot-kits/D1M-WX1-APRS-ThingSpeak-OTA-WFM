@@ -76,6 +76,6 @@ This procedure will temporarily turn the weather station into a Wi-Fi access poi
 
 Save the sketch. Set the PROG/RUN switch to **PROG** and upload to the microcontroller. **Return the switch to RUN after a sucessful upload.**
 
-| Click to enlarge  | Click to enlarge | Click to enlarge |
+| Click to enlarge  |  |  |
 |:----:|:----:|:----:|
-|<img src="/images/CaptivePortalLogin.jpg" width="40%"/> | <img src="/images/CaptivePortalTop.jpg" width="70%"/> | <img src="/images/CaptivePortalLower.jpg" width="70%"/>|  
+|<img src="/images/CaptivePortalLogin.jpg" width="30%"/> | <img src="/images/CaptivePortalTopjpg.jpg" width="30%"/> | <img src="/images/CaptivePortalLower.jpg" width="30%"/>|  
