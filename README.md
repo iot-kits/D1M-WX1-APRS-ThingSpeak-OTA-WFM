@@ -44,7 +44,7 @@ The general steps are:
   - Connect your PC to the D1 Mini with a Micro USB cable.
   - Open the serial monitor and set the baud rate to 115200.
   - Compile and upload the firmware.
-  - Note status messages from teh D1 Mini.
+  - Note status messages from the D1 Mini.
 
 ## Software Configuration
 These instructions are for a cell phone with Wi-Fi capability. The same method could be used with a Wi-Fi connected computer. 
@@ -58,10 +58,14 @@ This procedure will temporarily turn the weather station into a Wi-Fi access poi
     *	Your latitude and longitude in decimal degrees
     *	Your elevation in meters
     *	Your ThingSpeak channel ID and API Write key
-2.	Plug the Micro USB cable.....
-3.	Open your phone’s Wi-Fi connection settings. After a brief delay *D1M-WX1-portal* will appear in the list of available networks. Select it and wait for your phone to connect. You may safely ignore any warning that no Internet is available.
-4.	Open your phone’s browser. Enter **192.168.4.1** into the address bar. A web page will appear.
-5.	Enter the following information:  
+2.	Connect your PC to the D1 Mini with a Micro USB cable.
+    * Turn off the power switch or unplug the LiPo cell to prevent backfeed.
+    * Set the PROG/RUN switch to RUN
+    * Open the IDE serial monitor
+3. Press the *RESET* button on the D1 Mini twice to start the WiFiManager. This is indicated by the blue LED being illuminated. You may have to do this a few times to get it to recognize the double resets.
+4.	Open your phone’s Wi-Fi connection settings. After a brief delay *D1M-WX1-portal* will appear in the list of available networks. Select it and wait for your phone to connect. You may safely ignore any warning that no Internet is available.
+5.	Open your phone’s browser. Enter **192.168.4.1** into the address bar. A web page will appear.
+6.	Enter the following information:  
     * Your Wi-Fi SSID (you may select this from the available networks shown at the top of the page)
     *	Your Wi-Fi password
     *	Your callsign-SSID. 
@@ -70,13 +74,10 @@ This procedure will temporarily turn the weather station into a Wi-Fi access poi
     *	Your elevation in meters
     *	Your ThingSpeak channel ID and API Write key
     *	Hit **Save**
-
 6. Example serial output TBD
-7.	If you ever need to change any parameter, press the reset button on the D1 Mini twice in succession. You may have to do this a few times. The unit goes into configuration mode when the blue LED on the D1 Mini turns on.
+7.	**If you ever need to change any parameter, press the *RESET* button on the D1 Mini twice in quick succession no more than 10 seconds apart. You may have to do this a few times. The unit goes into configuration mode when the blue LED on the D1 Mini turns on.**
 
-Save the sketch. Set the PROG/RUN switch to **PROG** and upload to the microcontroller. **Return the switch to RUN after a sucessful upload.**
-
-| Click to enlarge  |  |  |
+| Click to enlarge  |  |  |  |
 |:----:|:----:|:----:|
-|<img src="/images/CaptivePortalLogin.jpg" width="40%"/> | <img src="/images/CaptivePortalTopjpg.jpg" width="40%"/> | <img src="/images/CaptivePortalLower.jpg" width="40%"/>|  
+|<img src="/images/AvailableNetworks.jpg" width="40%"/>|<img src="/images/CaptivePortalLogin.jpg" width="40%"/> | <img src="/images/CaptivePortalTopjpg.jpg" width="40%"/> | <img src="/images/CaptivePortalLower.jpg" width="40%"/>|  
 | 192.168.4.1 | Upper part | Lower part |
