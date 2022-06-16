@@ -74,7 +74,7 @@ This procedure will temporarily turn the weather station into a Wi-Fi access poi
     *	Your elevation in meters
     *	Your ThingSpeak channel ID and API Write key
     *	Hit **Save**
-6. Example serial output TBD
+6. See an example serial output in the photo.
 7.	**If you ever need to change any parameter, press the *RESET* button on the D1 Mini twice in quick succession no more than 10 seconds apart. You may have to do this a few times. The unit goes into configuration mode when the blue LED on the D1 Mini turns on.**
 
 | Click to enlarge  |   |   |   |  |
