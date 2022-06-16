@@ -1,10 +1,11 @@
 // D1M-WX1-APRS-ThingSpeak-OTA-WFM.ino
-const int    FW_VERSION = 1016;
+const int    FW_VERSION = 1017;
 const String FW_FILENAME = "D1M-WX1-APRS-ThingSpeak-OTA-WFM";
 
 // TODO: fix adc autocalibrate, prevent out of range
 
-// 2022-06/15 v1016 bypass adcCalibrate, change to LittleFS, add DEBUG print, fix BITS: & PARAM:
+// 2022-06-16 v1017 fixed sensor failure detect, removed sensorData fails, added APRS message
+// 2022-06-15 v1016 bypass adcCalibrate, change to LittleFS, add DEBUG print, fix BITS: & PARAM:
 //                  changed to Adafruit_BME280
 // 2020-07-07 v1015 fix adcCalibrate - maybe
 // 2020-07-07 v1014 combine initSensors & checkAlarms into readSensors
@@ -150,11 +151,7 @@ struct
   float humidity;                // relative humidity (%)
   float lightLevel;              // light intensity (lux)
   float cellVoltage;             // volts
-  long  wifiRSSI;                // WiFi signal strength (dBm)
-  bool  bme280Fail = false;      // BME280 sensor failure flag
-  bool  bh1750Fail = false;      // BH1750 sensor failure flag
-  bool  lowVcell = false;        // low Vcell alarm flag
-  bool  lowRSSI = false;         // low WiFi signal alarm flag
+  long  wifiRSSI;                // signal strength (dBm)
 } sensorData;
 
 // The ESP8266 Real Time Clock memory is arranged into blocks of 4 bytes.
@@ -172,7 +169,7 @@ struct
   uint8_t   lowVcell;            // 1 byte,    9 total
   uint8_t   lowRSSI;             // 1 byte,   10 total
   float     timeAwake;           // 4 bytes,  14 total
-  float     adc_factor;          // 4 bytes,  18 total
+  float     adc_factor;          // 4 bytes,  18 total not used
   uint8_t   pad[2];              // 2 bytes,  20 total
 } rtcData;
 
@@ -354,9 +351,9 @@ void readSensors()
 
     // calculate the Sea Level Pressure from the station pressure and temperature
     sensorData.seaLevelPressure = SPtoSLP( sensorData.celsius,
-                                  sensorData.stationPressure, atof( wm_elevation ) );
+                                           sensorData.stationPressure, atof( wm_elevation ) );
 
-    if ( rtcData.bme280Fail )            // device was failed
+    if ( rtcData.bme280Fail )             // device was failed
     {
       unitStatus += "BME280 cleared. ";
       rtcData.bme280Fail = false;          // now cleared
@@ -372,11 +369,11 @@ void readSensors()
   }
 
   // initialize BH1750 light sensor
-  if (   bh1750.begin(BH1750::ONE_TIME_HIGH_RES_MODE))  // device is ok
+  if ( bh1750.begin(BH1750::ONE_TIME_HIGH_RES_MODE))  // device is ok
   {
+    bh1750.configure(BH1750::ONE_TIME_HIGH_RES_MODE); // for next time
     // read light level in lux
     sensorData.lightLevel = bh1750.readLightLevel();
-
     if ( rtcData.bh1750Fail == true )     // device was failed
     {
       unitStatus += "BH1750 cleared. ";
@@ -402,7 +399,7 @@ void readSensors()
   sensorData.cellVoltage = 5.0 * analogRead( A0 ) / 1023.0;
   if ( sensorData.cellVoltage > MIN_VCELL ) // unit is OK
   {
-    if ( rtcData.lowVcell == true )         // was failed
+    if ( rtcData.lowVcell )                 // was failed
     {
       unitStatus += "Vcell cleared. ";
       rtcData.lowVcell = false;             // now cleared
@@ -421,7 +418,7 @@ void readSensors()
   sensorData.wifiRSSI = WiFi.RSSI();
   if ( sensorData.wifiRSSI > MIN_RSSI )   // device is OK
   {
-    if ( rtcData.lowRSSI == true )        // device was failed
+    if ( rtcData.lowRSSI )        // device was failed
     {
       unitStatus += "RSSI cleared. ";
       rtcData.lowRSSI = false;            // now cleared
@@ -467,10 +464,6 @@ bool readRTCmemory()
 void writeRTCmemory()
 {
   // offset data 32 bytes to avoid OTA area
-  rtcData.bme280Fail = sensorData.bme280Fail;
-  rtcData.bh1750Fail = sensorData.bh1750Fail;
-  rtcData.lowVcell   = sensorData.lowVcell;
-  rtcData.lowRSSI    = sensorData.lowRSSI;
   rtcData.timeAwake  = ( millis() - startTime ) / 1000.0;  // total awake time in seconds
   //rtcData.adc_factor writen on config
   rtcData.crc32      = calculateCRC32( ((uint8_t*)&rtcData) + 4, sizeof( rtcData ) - 4 );
@@ -794,6 +787,10 @@ void postToAPRS()
       DEBUG_PRINTLN("APRS Login ok.");
       APRSsendWeather();
       APRSsendTelemetry();
+      if ( unitStatus != "" )
+      {
+        APRSsendMessage( unitStatus );
+      }
       client.stop();                  // disconnect from APRS-IS server
       DEBUG_PRINTLN("APRS done.");
     }
@@ -852,10 +849,20 @@ void APRSsendWeather()
   dataString += " ";
   dataString += APRS_SOFTWARE_VERS;
   client.println( dataString );      // send to APRS-IS
-
-  DEBUG_PRINT("Send: ");
-  DEBUG_PRINTLN( dataString );      // print to serial port
+  DEBUG_PRINTLN("Send: " + dataString );      // print to serial port
 } // APRSsendWeather()
+
+// send directed message no ACK
+void APRSsendMessage(String msg)
+{
+  // APRS101.pdf pg71
+  String dataString = callsign;
+  dataString += ">APRS,TCPIP*:";
+  dataString += ":" + APRSpadCall(callsign) + ":";
+  dataString += msg;
+  DEBUG_PRINTLN("Send: " + dataString);
+  client.println( dataString );         // send to APRS-IS
+}
 
 // *******************************************************
 // ************* Send telemetry data to APRS *************
@@ -876,7 +883,7 @@ void APRSsendTelemetry()
   // On aprs.fi:
   //   0 causes bit sense channel name to appear in bold with dark gray background
   //   1 causes channel name to be regular weight on a light gray background
-  if ( sensorData.bme280Fail )
+  if ( rtcData.bme280Fail )
   {
     dataString += "0";
   }
@@ -884,7 +891,7 @@ void APRSsendTelemetry()
   {
     dataString += "1";
   }
-  if ( sensorData.bh1750Fail )
+  if ( rtcData.bh1750Fail )
   {
     dataString += "0";
   }
@@ -892,7 +899,7 @@ void APRSsendTelemetry()
   {
     dataString += "1";
   }
-  if ( sensorData.lowVcell )
+  if ( rtcData.lowVcell )
   {
     dataString += "0";
   }
@@ -900,7 +907,7 @@ void APRSsendTelemetry()
   {
     dataString += "1";
   }
-  if ( sensorData.lowRSSI )
+  if ( rtcData.lowRSSI )
   {
     dataString += "0";
   }
@@ -909,11 +916,11 @@ void APRSsendTelemetry()
     dataString += "1";
   }
   dataString += "0000";                 // unused digital channels
-  dataString += "," + APRS_PROJECT;         // Project Title 0 - 23 characters
-  client.println( dataString );               // send to APRS-IS
+  dataString += "," + APRS_PROJECT;     // Project Title 0 - 23 characters
+  client.println( dataString );         // send to APRS-IS
 
   DEBUG_PRINT("Send: ");
-  DEBUG_PRINTLN( dataString );               // print to serial port
+  DEBUG_PRINTLN( dataString );          // print to serial port
 
   // send telemetry definitions every TELEM_SPAN cycles
   if ( rtcData.sequence % ( APRS_DEFINITION_SPAN / SLEEP_INTERVAL ) == 0 || saveConfigFlag )
@@ -1004,16 +1011,16 @@ void APRSsendTelemetryDefinitions(String callsign)
   dataString += ",0,0.025,0";       // A4 convert 0-999 to 0-24.975 seconds
   //  dataString += ",0,0,0";       // A5 (spare)
   client.println( dataString );     // send to APRS-IS
-  DEBUG_PRINTLN("Send: " + dataString);    // print to serial port
+  DEBUG_PRINTLN("Send: " + dataString); // print to serial port
 
   // BITS - bit sense and project identity
   dataString = APRStelemHeader;
   dataString += "BITS.";
-  dataString += "00000000";        // bits are set in APRSsendTelemetry()
+  dataString += "00000000";        // bit sense 0 = true
   dataString += ",";
   dataString += APRS_PROJECT;      // 23 char max
   client.println( dataString );    // send to APRS-IS
-  DEBUG_PRINTLN("Send: " + dataString);    // print to serial port
+  DEBUG_PRINTLN("Send: " + dataString); // print to serial port
 } // APRSsendTelemetryDefinitions()
 
 // *******************************************************
