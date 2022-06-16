@@ -1,14 +1,14 @@
 # D1M-WX1-APRS-ThingSpeak-OTA-WFM
 
-This firmware is for the *IoT-Kits* wireless, solar-powered weather station based on the Lolin Wemos D1 Mini. It posts your weather data to both ThingSpeak and APRS-IS. You must be a licensed Amateur Radio Operator to use APRS-IS. A ThingSpeak only version is available for people without a ham license.
+This firmware is for the *IoT-Kits<sup>&copy;</sup>* wireless, solar-powered weather station based on the Lolin Wemos D1 Mini. It posts your weather data to both ThingSpeak and APRS-IS. You must be a licensed Amateur Radio Operator to use APRS-IS. A ThingSpeak only version is available for people without a ham license.
 
-A captive portal served by *WiFiManager* allows easy confuration of the kit with a Wi-Fi connected cell phone. 
+A captive portal served by the D1 Mini allows easy configuration of the kit with a Wi-Fi-connected cell phone. 
 
 The general steps are:
 - Build the kit.
 - Configure the Arduino IDE and ThingSpeak channel.
 - Upload the firmware to the kit.
-- Configure the kit with a Wi-Fi connected cell phone.
+- Configure the kit with a Wi-Fi-connected cell phone.
 - Place the weather station into service.
 
 ## Detailed Instructions
@@ -26,15 +26,15 @@ The general steps are:
 - Download the version for your computer operating system at https://www.arduino.cc/ Do not use the web version or the Windows app.
 - Install the Arduino core for the ESP8266 at https://github.com/esp8266/Arduino Follow the instructions under the heading **Installing with Boards Manager**
 5. Add needed libraries to the Arduino IDE using menu item *Sketch>Include Library>Manage Libraries...* Search for and install each of the following libaries. Be aware that there may be several libraries with similar names. Check that you are installing the library by the author noted:
-  - WiFiManager by tzapu
-  - ArduinoJson by Benoît Blanchon
-  - BH1750 by Christopher Laws
-  - Adafruit_BME280 by Adafruit
-  - DoubleResetDetector by Stephen Denne
+  - **WiFiManager** by tzapu
+  - **ArduinoJson** by Benoît Blanchon
+  - **BH1750** by Christopher Laws
+  - **Adafruit_BME280** by Adafruit
+  - **DoubleResetDetector** by Stephen Denne
 6. Download the firmware from this Github repository:
 - Click on the **Code** button and select **Download ZIP**. The file will download as **D1M-WX1-APRS-ThingSpeak-OTA-WFM-main.zip**. 
 - Unzip the file. The unzipped folder will contain several files and a folder **D1M-WX1-APRS-ThingSpeak-OTA-WFM**. Copy this folder to your Arduino sketchbook folder.
-- If you need to find your sketchbook folder, open the Arduino IDE and use menu **File>Preferences**. The first line tells you where the sketchbook resides on your computer.
+  - If you need to find your sketchbook folder, open the Arduino IDE and use menu **File>Preferences**. The first line tells you where the sketchbook resides on your computer.
 - Use menu item *File>Sketchbook* to open **D1M-WX1-APRS-ThingSpeak-OTA-WFM**
 - Set *Tools>Board>ESP8266 Boards* to **LOLIN(WEMOS) D1 R2 & mini**
 - Do a test compile from *Sketch>Verify/Compile* or type Control+R. Correct any problems.
@@ -77,7 +77,7 @@ This procedure will temporarily turn the weather station into a Wi-Fi access poi
 6. See an example serial output in the photo.
 7.	**If you ever need to change any parameter, press the *RESET* button on the D1 Mini twice in quick succession no more than 10 seconds apart. You may have to do this a few times. The unit goes into configuration mode when the blue LED on the D1 Mini turns on.**
 
-| Click to enlarge  |   |   |   |  |
+| Click to enlarge |   |   |   |   |
 |:----:|:----:|:----:|:----:|:----:|
 |<img src="/images/AvailableNetworks.jpg" width="40%"/>|<img src="/images/CaptivePortalLogin.jpg" width="40%"/> | <img src="/images/CaptivePortalTopjpg.jpg" width="40%"/> | <img src="/images/CaptivePortalLower.jpg" width="40%"/>| <img src="/images/SerialOutput.png" width="40%"/>| 
-|Find *D1M-WX1-portal* in Available Networks|Open *192.168.4.1* in cell phone browser | Upper part | Lower part | Serial Output |
+|Find *D1M-WX1-portal* in Available Networks|Open *192.168.4.1* in cell phone browser | Upper part of portal| Lower part of portal | Serial Output |
